@@ -5,8 +5,6 @@ const app = express()
 const port = 5000
 
 app.listen(process.env.PORT || port, async () => {
-    if (err)
-    console.log(err);
   try {
     await mongoose.connect('mongodb+srv://lunaticky:rhanchd6@cluster0.rfmec.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
   } catch (error) {
