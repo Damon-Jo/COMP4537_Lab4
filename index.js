@@ -84,34 +84,35 @@ app.post('/api/v2/unicorn', (req, res) => {
 })
 
 app.patch('/api/v2/unicorn/:id', (req, res) => {
-    // - update a unicorn
-  
-    // unicornsJSON = unicornsJSON.map(({ _id, ...aUnicorn }) => {
-    //   // console.log(req.body);
-    //   if (_id == req.body._id) {
-    //     console.log("Bingo!");
-    //     return req.body
-    //   } else
-    //     return aUnicorn
-    // })
-    // console.log(unicornsJSON);
-  
-  
-    //update the file
-    // writeFileAsync('./data.js', JSON.stringify(unicornsJSON), 'utf-8')
-    //   .then(() => { })
-    //   .catch((err) => { console.log(err); })
-    // console.log(req.body);
-    const { _id, ...rest } = req.body;
-    unicornModel.updateOne({ _id: mongoose.Types.ObjectId(req.params.id) }, {$set: {...rest}}, {runValidators:true},function (err, res) {
-      // Updated at most one doc, `res.nModified` contains the number
-      // of docs that MongoDB updated
-      if (err) console.log(err)
-      console.log(res)
-    });
-  
-    res.send("Updated successfully!")
-  })
+  // - update a unicorn
+
+  // unicornsJSON = unicornsJSON.map(({ _id, ...aUnicorn }) => {
+  //   // console.log(req.body);
+  //   if (_id == req.body._id) {
+  //     console.log("Bingo!");
+  //     return req.body
+  //   } else
+  //     return aUnicorn
+  // })
+  // console.log(unicornsJSON);
+
+
+  //update the file
+  // writeFileAsync('./data.js', JSON.stringify(unicornsJSON), 'utf-8')
+  //   .then(() => { })
+  //   .catch((err) => { console.log(err); })
+  // console.log(req.body);
+  const { _id, ...rest } = req.body.love;
+  unicornModel.updateOne({ _id: mongoose.Types.ObjectId(req.params.id) }, {$set: {...rest}}, {runValidators:true},function (err, res) {
+    // Updated at most one doc, `res.nModified` contains the number
+    // of docs that MongoDB updated
+    if (err) console.log(err)
+    console.log(res)
+});
+
+  res.send("Updated successfully!")
+})
+
 
   app.delete('/api/v2/unicorn/:id', (req, res) => {
     // - delete a unicorn
@@ -128,3 +129,58 @@ app.patch('/api/v2/unicorn/:id', (req, res) => {
   
     res.send("Deleted successfully?")
   })
+
+
+// //Challenge part!!!
+// app.patch('/api/v2/unicornNewLovesFood/:id/', (req, res) => {
+//   unicornModel.updateOne({ _id: mongoose.Types.ObjectId(req.params.id) }, {$set: {loves : req.body.loves}}, {runValidators:true},function (err, res) {
+//     if (err) console.log(err)
+//     console.log(res)
+//   });
+
+//   res.send("Updated successfully!")
+// })
+
+
+// Challenge part!!!
+app.patch('/api/v2/unicornNewLovesFood/:id/', (req, res) => {
+  unicornModel.updateOne({ _id: mongoose.Types.ObjectId(req.params.id) }, req.body, {runValidators:true},function (err, res) {
+    if (err) console.log(err)
+    console.log(res)
+  });
+
+  res.send("Updated successfully!")
+})
+
+
+
+
+app.patch('/api/v2/unicornAddLovesFood/:id/', (req, res) => {
+  unicornModel.updateOne({ _id: mongoose.Types.ObjectId(req.params.id) }, {
+    $push: {
+      loves: req.body.newLoves
+    }
+  }, function (err, res) {
+    // Updated at most one doc, `res.nModified` contains the number
+    // of docs that MongoDB updated
+    if (err) console.log(err)
+    console.log(res)
+  });
+  res.send("Updated successfully!")
+})
+
+
+
+app.patch('/api/v2/unicornRemoveLovesFood/:id/:item', (req, res) => {
+  unicornModel.updateOne({ _id: mongoose.Types.ObjectId(req.params.id) }, {
+    $pull: {
+      loves: req.params.item
+    }
+  }, function (err, res) {
+    // Updated at most one doc, `res.nModified` contains the number
+    // of docs that MongoDB updated
+    if (err) console.log(err)
+    console.log(res)
+  });
+  res.send("Updated successfully!")
+})
